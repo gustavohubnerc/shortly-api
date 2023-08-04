@@ -6,7 +6,7 @@ export async function signIn(req, res){
     const { email, password } = req.body;
 
     try {
-        const user = await db.query(`SELECT email, password FROM users WHERE email = $1`, [email]);
+        const user = await db.query(`SELECT id, email, password FROM users WHERE email = $1`, [email]);
         if(!user.rows[0]) return res.status(401).send("User not found");
 
         const validPassword = bcrypt.compareSync(password, user.rows[0].password);
