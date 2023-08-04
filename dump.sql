@@ -91,9 +91,9 @@ ALTER SEQUENCE public.urls_id_seq OWNED BY public.urls.id;
 
 CREATE TABLE public.users (
     id integer NOT NULL,
-    email character varying(50) NOT NULL,
-    name character varying(25) NOT NULL,
-    password character varying(30) NOT NULL,
+    email character varying(60) NOT NULL,
+    name character varying(30) NOT NULL,
+    password character varying(255) NOT NULL,
     "createdAt" timestamp without time zone DEFAULT now() NOT NULL,
     CONSTRAINT valid_email_format CHECK (((email)::text ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'::text))
 );
@@ -156,13 +156,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.users VALUES (1, 'joao@driven.com.br', 'João', '$2b$10$xVWqfc6r7sLtF4K8KkVb4.KL0VIHnhx4QwL1ZJ31M7.v/wOM4kjPS', '2023-08-04 13:03:21.487572');
 
 
 --
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
 
 
 --
@@ -176,7 +177,7 @@ SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
@@ -217,14 +218,6 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: sessions sessions_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sessions
-    ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
