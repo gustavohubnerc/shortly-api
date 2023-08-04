@@ -54,13 +54,25 @@ export async function openShortUrl(req, res){
     }
 }
 
-/* export async function deleteShortUrl(req, res){
+export async function deleteShortUrl(req, res){
     const { id } = req.params;
 
+    const authorization = req.headers.authorization;
+    if(!authorization) return res.status(401).send("Unauthorized");
+
+    const token = authorization.replace("Bearer ", "");
+
     try {
-        
-    
+        const user = await db.query(`SELECT "userId" FROM sessions WHERE token = $1`, [token]);
+        if(user.rowCount === 0) return res.status(401).send("Unauthorized");
+
+        const url = await db.query(`SELECT url FROM urls WHERE id = $1`, [id]);
+        if(url.rowCount === 0) return res.status(404).send("Url not found");
+
+        await db.query(`DELETE FROM urls WHERE id = $1`, [id]);
+
+        res.sendStatus(204);
     } catch (error) {
         res.status(500).send(error.message);
     }
-} */
+}
