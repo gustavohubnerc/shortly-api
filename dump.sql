@@ -60,7 +60,8 @@ CREATE TABLE public.urls (
     id integer NOT NULL,
     "userId" integer NOT NULL,
     "shortUrl" text NOT NULL,
-    url text NOT NULL
+    url text NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
