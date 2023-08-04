@@ -6,7 +6,7 @@ export async function createUser(req, res){
     
     try {
         const userExists = await db.query("SELECT id FROM users WHERE email = $1", [email]);
-        if(userExists) return res.status(409).send("User already exists");
+        if(userExists.rowCount > 0) return res.status(409).send("User already exists");
 
         const hashPassword = bcrypt.hashSync(password, 10);
        
