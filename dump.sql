@@ -58,9 +58,10 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
-    "userId" integer NOT NULL,
-    "shortUrl" text NOT NULL,
     url text NOT NULL,
+    "shortUrl" text NOT NULL,
+    "userId" integer NOT NULL,
+    visits integer DEFAULT 0,
     "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
@@ -144,12 +145,16 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.sessions VALUES (7, 1, 'd4bd0505-2450-47ce-a57f-2cb50e46c38f', '2023-08-04 13:39:46.95875');
+INSERT INTO public.sessions VALUES (8, 1, 'd5244e38-da0a-4208-9ab8-e8d0a0f79d31', '2023-08-04 14:05:38.10015');
 
 
 --
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.urls VALUES (1, 'https://hub.driven.com.br', 'qfBPUhi_', 1, 6, '2023-08-04 14:40:45.802464');
+INSERT INTO public.urls VALUES (2, 'https://flamengo.com.br', 'AWCD15PQ', 1, 3, '2023-08-04 16:00:53.112236');
 
 
 --
@@ -157,27 +162,28 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 INSERT INTO public.users VALUES (1, 'joao@driven.com.br', 'João', '$2b$10$xVWqfc6r7sLtF4K8KkVb4.KL0VIHnhx4QwL1ZJ31M7.v/wOM4kjPS', '2023-08-04 13:03:21.487572');
+INSERT INTO public.users VALUES (2, 'gustavo@driven.com.br', 'Gustavo', '$2b$10$jabaybRaGLpMbzyJPhlHhuh3zmCzMzAnaNFap9g0lRYAtHobVpyV.', '2023-08-04 13:24:36.511384');
 
 
 --
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 8, true);
 
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
+SELECT pg_catalog.setval('public.urls_id_seq', 2, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 2, true);
 
 
 --
@@ -218,6 +224,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: urls urls_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls
+    ADD CONSTRAINT "urls_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
