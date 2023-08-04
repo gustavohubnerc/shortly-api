@@ -25,3 +25,16 @@ export async function shortenUrl(req, res){
         res.status(500).send(error.message);
     }
 }
+
+export async function getUrlById(req, res){
+    const { id } = req.params;
+    
+    try {
+        const url = await db.query(`SELECT id, url, "shortUrl" FROM urls WHERE id = $1`, [id]); 
+        if(url.rowCount === 0) return res.status(404).send("Url not found");
+
+        res.status(200).send(url.rows[0]);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }    
+}    
