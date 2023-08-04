@@ -58,11 +58,12 @@ export async function deleteShortUrl(req, res){
     const { id } = req.params;
 
     const authorization = req.headers.authorization;
-    if(!authorization) return res.status(401).send("Unauthorized");
 
     const token = authorization.replace("Bearer ", "");
 
     try {
+        if(!authorization) return res.status(401).send("Unauthorized");
+
         const user = await db.query(`SELECT "userId" FROM sessions WHERE token = $1`, [token]);
         if(user.rowCount === 0) return res.status(401).send("Unauthorized");
 
