@@ -16,18 +16,18 @@ export async function getUserInfo(req, res){
 
         const urls = await db.query(`SELECT id, url, "shortUrl" FROM urls WHERE "userId" = $1`, [user.rows[0].userId]);
 
-        const shortUrls = urls.rows.map((url) => ({
+        const shortenedUrls = urls.rows.map((url) => ({
             id: url.id,
             shortUrl: url.shortUrl,
             url: url.url,
-            visitors: url.visits,
+            visitors: url.visits
         }));
 
         const userInfo = {
             id: user.rows[0].userId,
             name: userName.rows[0].name,
             visitCount,
-            shortUrls
+            shortenedUrls
         };
 
         res.status(200).send(userInfo);
