@@ -12,15 +12,15 @@ export async function getUserInfo(req, res){
         const userName = await db.query(`SELECT name FROM users WHERE id = $1`, [user.rows[0].userId]);
 
         const visitors = await db.query(`SELECT SUM(visits) AS totalviews FROM urls WHERE "userId" = $1`, [user.rows[0].userId]);
-        const visitCount = visitors.rows[0].totalviews;
+        const visitCount = visitors.rows[0].totalviews || 0;
 
-        const urls = await db.query(`SELECT id, url, "shortUrl" FROM urls WHERE "userId" = $1`, [user.rows[0].userId]);
+        const urls = await db.query(`SELECT id, url, "shortUrl", visits FROM urls WHERE "userId" = $1`, [user.rows[0].userId]);
 
         const shortenedUrls = urls.rows.map((url) => ({
             id: url.id,
             shortUrl: url.shortUrl,
             url: url.url,
-            visitors: url.visits
+            visitCount: url.visits
         }));
 
         const userInfo = {
